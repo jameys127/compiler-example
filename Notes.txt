@@ -1,0 +1,89 @@
+
+#2/24/25 Tokenizing simple lines in a program
+--------------------------------------------------------------------
+If we want to read a simple program:
+    foo = 1 + 32;
+    print foo;
+
+the first thing we run into is the 'f' in foo
+    is it an INTEGER [0-9]?
+            NO 
+
+    so then we go to IDENTIFIER [a-z A-Z][a-z A-Z 0-9]* #Example 'f12' 'a' 'foo'    Wrong:  '$' '_'
+            YES so then we go until we find a white space: foo
+
+    so now we move onto the next line which is ' ' an empty space
+            This signals that the foo token has finalized and a token has been produced => 'foo'
+            Then we start the process again
+            
+            whitespace: ['\n' '\t' ' ' ]
+    
+    so now we are at the EQUALS
+            there are a lot of op tokens PLUS MINUS DIVIS MULT EQUALS SEMICOLON etc.
+            order matters for which op you look at first in that list
+                    eg. bool b = 1 == 2;  //there is DOUBLEEQUALS and EQUALS. you should probably check DOUBLEEQUALS first before EQUALS
+            okay cool created an EQUALS token
+    
+    so now we run into whitespace and then the '1'
+            this is an INTEGER => '1' token
+    
+    another whitespace which moves me forward to '+'
+            go down the list: IDENTIFIER -> INTEGER -> EQUALS -> PLUS
+            we get to PLUS and make a token
+    
+    whitespace then 3
+            this is an INTEGER followed by more characters that are also numbers
+            so token => 32
+    
+    finally SEMICOLON
+            token => SEMICOLON
+    
+    and then we go to the next line to 'print' and here it gets tricky
+            Here is an example of how this could be a problem:
+                    int intx = 3;
+                    this could come up as 'INTEGER'-'IDENTIFIER("x")' and make 2 tokens
+                    we want: 'IDENTIFIER("intx")
+            we want reserved words
+                    Reserved Word: ["print"]
+            so token => 'print'
+    
+    whitespace then the f in foo
+            matches IDENTIFIER so foo gets a token => "foo"
+            foo is also not a reserved word which you have to check now
+    
+    and last a SEMICOLON
+            token => SEMICOLON
+
+    So all the tokens: IDENTIFIER("foo") -> EQUALS -> INTEGER(1) ->
+                       PLUS -> INTEGER(32) -> SEMICOLON -> print -> IDENTIFIER("foo") -> SEMICOLON
+
+
+#2/26/25 - Live coding tokenizer
+        He is using Maven. He used a command called mvn compile for java specific stuff. Look into that.
+
+        We are using the java.util.Optional for the tokenizer
+
+                Optional.empty()
+                Optional.of(...)
+                        eg. Optional<Object> obj1 = Optional.empty();
+                Optional.isPresent()
+                Optional.get()
+                        eg. obj1.isPresent(); //returns false because it is empty
+                            Optional<Object> obj2 = Optional.of(new Object());
+                            obj2.isPresent(); //returns true
+                            Object a = obj2.get();
+
+                'Optional<Object>' is a different thing than just the 'Object' It shows that the object might be empty
+                like you might not actually have an object.
+                Use case:
+                        //Way to enforce what needs to be checked, null checks, if they are empty
+                        if(obj2.isPresent()){
+                                Object a = obj2.get();
+                                ...
+                                ...
+                        }
+        
+        For the tokenizer he wants the methods to all be private but right now they are public for testing purposes.
+
+        Test-Driven Development: write your tests first before even righting a program. It ensures that you can get confirmation
+        that you haven't forgotten anything or broken anything.

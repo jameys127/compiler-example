@@ -18,4 +18,10 @@ public class TokenizerTest {
         assertEquals(Optional.of(new IntegerToken(1)),
                     tokenizer.tryReadIntegerToken());
     }
+
+    @Test
+    public void testReadDoubleDigitInteger(){
+        final Tokenizer tokenizer = new Tokenizer("12");
+        assertEquals(Optional.of(new IntegerToken(12)), tokenizer.tryReadIntegerToken());
+    }
 }

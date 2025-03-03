@@ -87,3 +87,28 @@ the first thing we run into is the 'f' in foo
 
         Test-Driven Development: write your tests first before even righting a program. It ensures that you can get confirmation
         that you haven't forgotten anything or broken anything.
+
+# 3/3/25 Continued Tokenizer / Testing
+
+        Test Coverage:
+                Suppose we have this line of code -
+
+                        int min(int x, int y){
+                                if(x < y){
+                                        return x;
+                                } else {
+                                        return y;
+                                }
+                        }
+
+                Then we can write Tests for it - 
+                        assertEquals(0, min(0,1))
+                        assertEquals(1, min(1,2))
+                        assertEquals(2, min(2,3))
+                        ...
+                These are all the same type of tests that don't actually tell you anything.
+                Test coverage is where you mark every spot in the code that actually got executed.
+                        There would be a green check mark for every line that actually got executed in the original min() method.
+                        This is also referred to as Line Coverage
+                
+                

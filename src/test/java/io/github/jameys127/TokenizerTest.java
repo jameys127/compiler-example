@@ -1,6 +1,8 @@
 package io.github.jameys127;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.ArrayList;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
@@ -49,6 +51,15 @@ public class TokenizerTest {
     public void testReadIntegerWithEmpty(){
         final Tokenizer tokenizer = new Tokenizer("");
         assertEquals(Optional.empty(), tokenizer.tryReadIntegerToken());
+    }
+
+    @Test
+    public void TestMultiTokenize() throws TokenizerException{
+        //foo bar
+        final Tokenizer tokenizer = new Tokenizer("foo bar");
+        final ArrayList<Token> tokens = tokenizer.tokenize();
+        assertEquals(new IdentifierToken("foo"), tokens.get(0));
+        assertEquals(new IdentifierToken("bar"), tokens.get(1));
     }
     
 }

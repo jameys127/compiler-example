@@ -1,5 +1,6 @@
 package io.github.jameys127;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class Tokenizer {
@@ -71,5 +72,77 @@ public class Tokenizer {
         }
     }
 
+    public Optional<Token> tryReadIdentifierTokenOrReservedWord(){
+        if (position < input.length() &&
+        Character.isLetter(input.charAt(position))){
+            String chars = "" + input.charAt(position);
+            position++;
+            while (position < input.length() && Character.isLetterOrDigit(input.charAt(position))) {
+                chars += input.charAt(position);
+                position++;
+            }
+            if(chars.equals("print")){
+                return Optional.of(new PrintToken());
+            } else {
+                return Optional.of(new IdentifierToken(chars));
+            }
+        }else {
+            return Optional.empty();
+        }
+    }
+
+    public Optional<Token> readSymbol(){
+        String symbol = "";
+        if (input.startsWith("(", position)){
+            position++;
+            return Optional.of(new LParenToken(symbol));
+        }else if (input.startsWith(")", position)){
+            position++;
+            return Optional.of(new RParenToken(symbol));
+        }else {
+            return Optional.empty();
+        }
+        // continue with all symbols
+    }
+
+    // assumes we aren't on whitespace and we are in range
+    public Token readToken() throws TokenizerException{
+        Optional<Token> token1;
+        if ((token1 = tryReadIntegerToken()).isPresent() ||
+            (token1 = tryReadIdentifierToken()).isPresent() ||
+            (token1 = readSymbol()).isPresent()){
+            return token1.get();
+        }else{
+            throw new TokenizerException("Invalid char: " + input.charAt(position));
+        }
+
+
+        // Optional<Token> token = tryReadIntegerToken();
+        // if (token.isPresent()){
+        //     return token.get();
+        // }else {
+        //     token = tryReadIdentifierToken();
+        //     if(token.isPresent()){
+        //         return token.get();
+        //     }else{
+        //         token = readSymbol();
+        //         if(token.isPresent()){
+        //             return token.get();
+        //         }else{
+        //             throw new TokenizerException("Invalid char: " + input.charAt(position));
+        //         }
+        //     }
+        // }
+    }
+
+    public ArrayList<Token> tokenize() throws TokenizerException {
+        final ArrayList<Token> tokens = new ArrayList<Token>();
+        skipWhitespace();
+        while (position < input.length()){
+            tokens.add(readToken());
+            skipWhitespace();
+        }
+        return tokens;
+    }
     
 }

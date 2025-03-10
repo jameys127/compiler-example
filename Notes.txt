@@ -111,4 +111,35 @@ the first thing we run into is the 'f' in foo
                         There would be a green check mark for every line that actually got executed in the original min() method.
                         This is also referred to as Line Coverage
                 
-                
+
+
+#3/10/25
+
+        Continued for Operations: Input => Tokenizer -> Token[] => Parser => Abstract Syntax Tree.
+        We are now coding in the different Ops that can be made with the symbol tokens.
+
+                                                 Op
+                                          /    /    \     \
+                                        Plus Minus Mult Division
+
+        For Stmt is a little bit different. stmt ::= IDENTIFIER '=' exp ';' | 'print' exp ';' |
+
+                                                Stmt
+                                AssignStmt                  PrintStmt
+                                 |String name                |exp e
+                                 |exp e
+                AssignStmt has to clear because x = 5; and x = 7; are NOT the same; x = 5; a = 5; are NOT the same
+                So AssignStmt has to have the same variable name and assigned 'exp'
+                        AssignStmt has to keep track of String name and exp e
+                        Same with PrintStmt and exp e
+
+        For Exp they are going to be a lot harder than the rest
+
+                                                Exp
+                                   /             |             \
+                                IdentExp       IntExp        BinOpExp
+                                 |String name   |int Value    |Exp left
+                                                              |Op op
+                                                              |Exp right
+
+        We haven't actually done any parsing yet. We are going to utilize "Recursive Descent Parsing"

@@ -1,4 +1,4 @@
-package io.github.jameys127;
+package io.github.jameys127.Lexer;
 
 import java.util.ArrayList;
 import java.util.Optional;

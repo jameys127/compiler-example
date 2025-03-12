@@ -1,4 +1,4 @@
-package io.github.jameys127;
+package io.github.jameys127.Parser;
 
 public record IntExp(int value) {
 }

@@ -1,4 +1,4 @@
-package io.github.jameys127;
+package io.github.jameys127.Parser;
 
 public record AssignStmt(String name, Exp e) implements Stmt{
     // public class PrintStmt implements Stmt{

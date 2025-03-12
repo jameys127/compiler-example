@@ -6,6 +6,12 @@ import java.util.ArrayList;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
+import io.github.jameys127.Lexer.IdentifierToken;
+import io.github.jameys127.Lexer.IntegerToken;
+import io.github.jameys127.Lexer.Token;
+import io.github.jameys127.Lexer.Tokenizer;
+import io.github.jameys127.Lexer.TokenizerException;
+
 public class TokenizerTest {
     @Test
     public void testEmpty(){

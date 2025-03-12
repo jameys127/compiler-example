@@ -1,4 +1,7 @@
-package io.github.jameys127;
+package io.github.jameys127.Parser;
+
+import io.github.jameys127.Lexer.Token;
+import io.github.jameys127.Parser.ParseException;
 
 public class Parser {
     public final Token[] tokens;
@@ -15,6 +18,6 @@ public class Parser {
     }
 
     public ParseResult<Stmt> stmt(final int startPos) throws ParseException{
-
+        final Token token = readToken(startPos);
     }
 }

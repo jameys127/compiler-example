@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
+import io.github.jameys127.Lexer.AddToken;
+import io.github.jameys127.Lexer.DivisionToken;
 import io.github.jameys127.Lexer.IdentifierToken;
 import io.github.jameys127.Lexer.IntegerToken;
 import io.github.jameys127.Lexer.Token;
@@ -16,6 +18,16 @@ public class TokenizerTest {
     @Test
     public void testEmpty(){
         final Tokenizer tokenizer = new Tokenizer("");
+        Token token = new AddToken();
+        Token token2 = new AddToken();
+        Token token3 = new DivisionToken();
+        System.out.println(token);   
+        System.out.println(token2);   
+        System.out.println(token3);   
+        System.out.println(token.hashCode());   
+        System.out.println(token2.hashCode());   
+        System.out.println(token3.hashCode());   
+        System.out.println(token.equals(token2));   
         tokenizer.skipWhitespace();
         assertEquals(0, tokenizer.getPosition());
     }

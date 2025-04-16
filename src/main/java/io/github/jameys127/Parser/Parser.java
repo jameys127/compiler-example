@@ -27,23 +27,24 @@ public class Parser {
         }
     }
     public ParseResult<Exp> multExp(final int startPos) throws ParseException{
-
+        return null;
     }
 
     public ParseResult<Exp> addExp(final int startPos) throws ParseException{
         final ParseResult<Exp> m = multExp(startPos);
-        Exp result = m.result;
+        Exp result = m.result();
         boolean shouldRun = true;
-        int pos = m.nextPos;
+        int pos = m.nextPos();
         while(shouldRun){
-            final Token t = getToken(pos);
+            final Token t = readToken(pos);
             final Op op;
             if(t instanceof AddToken){
-                op = new AddToken();
-            }else if (t instanceof) {
-                
+                op = new PlusOp();
+            }else if (t instanceof MinusToken) {
+                op = new MinusOp();
             }
         }
+        return null;
     }
 
     public ParseResult<Exp> exp(final int startPos) throws ParseException{
@@ -51,7 +52,7 @@ public class Parser {
     }
 
     public void assertTokenIs(final int pos, final Token expected) throws ParseException{
-        final Token received = getToken(pos);
+        final Token received = readToken(pos);
         if(!expected.equals(received)){
             throw new ParseException("Expected: " + expected.toString() +
                                     "; received: " + received.toString());
@@ -68,27 +69,27 @@ public class Parser {
     public ParseResult<Stmt> stmt(final int startPos) throws ParseException{
         final Token token = readToken(startPos);
         if(token instanceof IdentifierToken id){
-            String name = id.name;
+            String name = id.name();
             assertTokenIs(startPos + 1, new EqualsToken());
             ParseResult<Exp> expression = exp(startPos + 2);
-            assertTokenIs(expression.nextPos, new SemicolonToken());
-            AssignStmt assign = new AssignStmt(name, expression.result);
-            return new ParseResult<Stmt>(assign, expression.nextPos + 1);
+            assertTokenIs(expression.nextPos(), new SemicolonToken());
+            AssignStmt assign = new AssignStmt(name, expression.result());
+            return new ParseResult<Stmt>(assign, expression.nextPos() + 1);
         }else if(token instanceof PrintToken){
             ParseResult<Exp> expression = exp(startPos + 1);
-            assertTokenIs(expression.nextPos, new SemicolonToken());
-            PrintStmt print = new PrintStmt(expression.result);
-            return new ParseResult<Exp>(print, expression.nextPos + 1);
+            assertTokenIs(expression.nextPos(), new SemicolonToken());
+            PrintStmt print = new PrintStmt(expression.result());
+            return new ParseResult<Stmt>(print, expression.nextPos() + 1);
         }else if(token instanceof ReturnToken){
             ParseResult<Optional<Exp>> opExpression;
             try{
                 ParseResult<Exp> expression = exp(startPos + 1);
-                opExpression = new ParseResult<Optional<Exp>>(Optional.of(expression.result), expression.nextPos);
+                opExpression = new ParseResult<Optional<Exp>>(Optional.of(expression.result()), expression.nextPos());
             } catch (ParseException e){
                 opExpression = new ParseResult<Optional<Exp>>(Optional.empty(), startPos + 1);
             }
-            assertTokenIs(opExpression.nextPos, new SemicolonToken());
-            return new ParseResult<Stmt>(new ReturnStmt(opExpression.result), opExpression.nextPos + 1);
+            assertTokenIs(opExpression.nextPos(), new SemicolonToken());
+            return new ParseResult<Stmt>(new ReturnStmt(opExpression.result()), opExpression.nextPos() + 1);
         }
         else{
             throw new ParseException("Expected statement, got: " + token);
@@ -103,8 +104,8 @@ public class Parser {
         while(shouldRun){
             try{
                 final ParseResult<Stmt> stmtRes = stmt(pos);
-                stmts.add(stmtRes.result);
-                pos = stmtRes.nextPos;
+                stmts.add(stmtRes.result());
+                pos = stmtRes.nextPos();
             } catch (ParseException e){
                 shouldRun = false;
             }
@@ -114,10 +115,10 @@ public class Parser {
 
     public Program parseWholeProgram() throws ParseException{
         final ParseResult<Program> p = program(0);
-        if(p.nextPos == tokens.length){
-            return p.result;
+        if(p.nextPos() == tokens.length){
+            return p.result();
         }else{
-            throw new ParseException("Invalid token at position: " + p.nextPos);
+            throw new ParseException("Invalid token at position: " + p.nextPos());
         }
     }// parseWholeProgram
 }
